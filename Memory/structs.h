@@ -10,7 +10,6 @@
     } TLB;
 
     typedef struct {
-        int pg; // Numero da pagina
         int value; // valor associado
         bool valid;
         bool access;

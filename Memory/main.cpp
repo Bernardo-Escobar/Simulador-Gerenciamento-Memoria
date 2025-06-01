@@ -76,7 +76,7 @@ void viewTables32(TLB tlb32[], TP tp32[]){
     }
 }
 
-int pageSum(TLB tlb16[], TP tp16[], int pag, int desloc){
+int pageSum16(TLB tlb16[], TP tp16[], int pag, int desloc){
     bool b = true;
     int sum=0;
 
@@ -87,11 +87,24 @@ int pageSum(TLB tlb16[], TP tp16[], int pag, int desloc){
         }
     }
     if(b){
-        for(int i=0; i<32; i++){
-            if(pag == tp16[i].pg){
-                sum = tp16[i].value + desloc;
-            }
+        sum = tp16[pag].value + desloc;
+    }
+
+    return sum;
+}
+
+int pageSum32(TLB tlb32[], TP tp32[], int pag, int desloc){
+    bool b = true;
+    int sum=0;
+
+    for(int i=0; i<32; i++){
+        if(pag == tlb32[i].pg){
+            sum = tlb32[i].value + desloc;
+            b = false;
         }
+    }
+    if(b){
+        sum = tp32[pag].value + desloc;
     }
 
     return sum;
@@ -121,21 +134,21 @@ int main() {
                     pag = binaryInt16(num16, 8, 15);
                     desloc = binaryInt16(num16, 0, 7); 
 
-                    sum = pageSum(tlb16, tp16, pag, desloc);
+                    sum = pageSum16(tlb16, tp16, pag, desloc);
                 break;
 
                 case 2:
                     pag = binaryInt16(num16, 10, 15);
                     desloc = binaryInt16(num16, 0, 9); 
 
-                    sum = pageSum(tlb16, tp16, pag, desloc);
+                    sum = pageSum16(tlb16, tp16, pag, desloc);
                 break;
 
                 case 3:
                     pag = binaryInt16(num16, 11, 15);
                     desloc = binaryInt16(num16, 0, 10); 
 
-                    sum = pageSum(tlb16, tp16, pag, desloc);
+                    sum = pageSum16(tlb16, tp16, pag, desloc);
                 break;
             }
 
@@ -156,21 +169,21 @@ int main() {
                     pag = binaryInt32(num32, 8, 31);
                     desloc = binaryInt32(num32, 0, 7); 
 
-                    sum = pageSum(tlb32, tp32, pag, desloc);
+                    sum = pageSum32(tlb32, tp32, pag, desloc);
                 break;
 
                 case 2:
                     pag = binaryInt32(num32, 10, 31);
                     desloc = binaryInt32(num32, 0, 9); 
 
-                    sum = pageSum(tlb32, tp32, pag, desloc);
+                    sum = pageSum32(tlb32, tp32, pag, desloc);
                 break;
 
                 case 3:
                     // pag = binaryInt32(num32, 11, 15);
                     // desloc = binaryInt32(num32, 0, 10); 
 
-                    // sum = pageSum(tlb32, tp32, pag, desloc);
+                    // sum = pageSum32(tlb32, tp32, pag, desloc);
                 break;
             }
 
