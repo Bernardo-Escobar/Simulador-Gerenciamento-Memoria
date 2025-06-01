@@ -48,7 +48,7 @@ int binaryInt32(const bitset<32>& bits, int start, int end) {
     return result;
 }
 
-void viewTables(TLB tlb16[], TP tp16[]){
+void viewTables16(TLB tlb16[], TP tp16[]){
     cout << "Pg\t\t" << "Desloc\t\t" << endl;
     for(int i=0; i<16; i++){
         cout << tlb16[i].pg << "\t\t" << tlb16[i].value << endl;
@@ -59,6 +59,20 @@ void viewTables(TLB tlb16[], TP tp16[]){
     cout << "Pg\t\t" << "Desloc\t\t" << "Bit valido\t" << "Bit acesso" << endl;
     for(int i=0; i<32; i++){
         cout << tp16[i].pg << "\t\t" << tp16[i].value << "\t\t" << tp16[i].valid << "\t\t" << tp16[i].access << endl;
+    }
+}
+
+void viewTables32(TLB tlb32[], TP tp32[]){
+    cout << "Pg\t\t" << "Desloc\t\t" << endl;
+    for(int i=0; i<16; i++){
+        cout << tlb32[i].pg << "\t\t" << tlb32[i].value << endl;
+    }
+
+    cout << endl << endl << endl;
+
+    cout << "Pg\t\t" << "Desloc\t\t" << "Bit valido\t" << "Bit acesso" << endl;
+    for(int i=0; i<32; i++){
+        cout << tp32[i].pg << "\t\t" << tp32[i].value << "\t\t" << tp32[i].valid << "\t\t" << tp32[i].access << endl;
     }
 }
 
@@ -125,6 +139,8 @@ int main() {
                 break;
             }
 
+            viewTables16(tlb16, tp16);
+
             cout << num16 << endl;
         break;
         }
@@ -158,7 +174,10 @@ int main() {
                 break;
             }
 
-        cout << num32 << endl;
+            viewTables32(tlb32, tp32);
+
+            cout << num32 << endl;
+
         break;
         }
     }
@@ -170,14 +189,15 @@ int main() {
     
     file >> valorFinal;
 
-    viewTables(tlb16, tp16);
+
 
     cout << endl << endl;
 
-    //cout << num << endl;
-    cout << pag << endl;
-    cout << desloc << endl;
-    cout << "Valor final: " << valorFinal << endl;
+    //cout << "Endereco virtual: " << num << endl;
+    cout << "Pagina: " << pag << endl;
+    cout << "Deslocamento: " << desloc << endl;
+    // Acao tomada
+    cout << "Valor lido: " << valorFinal << endl;
 
     cin.get();
 
