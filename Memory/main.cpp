@@ -31,6 +31,21 @@ int binaryInt16(const bitset<16>& bits, int start, int end) {
     return result;
 }
 
+int binaryInt32(const bitset<32>& bits, int start, int end) {
+    int result = 0; // Armazena o valor final em inteiro
+    int bitPosition = 0; // Posição atual do bit no resultado final
+
+    for (int i = start; i <= end; ++i) {
+        if (bits[i]) { // Verifica se o bit na posição i é 1
+            result |= (1 << bitPosition); // Define o bit correspondente em result
+        }
+
+        ++bitPosition; // Avança para a próxima posição do bit no resultado
+    }
+
+    return result;
+}
+
 void viewTables(TLB tlb16[], TP tp16[]){
     cout << "Pg\t\t" << "Desloc\t\t" << endl;
     for(int i=0; i<16; i++){
@@ -47,7 +62,7 @@ void viewTables(TLB tlb16[], TP tp16[]){
 
 int pageSum(TLB tlb16[], TP tp16[], int pag, int desloc){
     bool b = true;
-    int sum;
+    int sum=0;
 
     for(int i=0; i<16; i++){
         if(pag == tlb16[i].pg){
@@ -71,49 +86,79 @@ int main() {
     int pag, desloc, sum=0;
     bool t = true;
 
-    bitset<16> num(59757);
-
     string valorFinal;
 
-    int op1, op2;
-
+    int op1=0, op2=0;
 
     cout << "Qual tamanho de endereco virtual? 1 - 16 bits; 2 - 32 bits" << endl;
     cin >> op1;
 
     switch(op1){
-        case 1:
+        case 1:{
+            bitset<16> num16(59757);
+
             cout << "Qual tamanho do deslocamento? 1 - 256 B; 2 - 1 KB; 3 - 2 KB" << endl;
             cin >> op2;
 
             switch(op2){
                 case 1:
-                    pag = binaryInt16(num, 8, 15);
-                    desloc = binaryInt16(num, 0, 7); 
+                    pag = binaryInt16(num16, 8, 15);
+                    desloc = binaryInt16(num16, 0, 7); 
 
                     sum = pageSum(tlb16, tp16, pag, desloc);
                 break;
 
                 case 2:
-                    pag = binaryInt16(num, 10, 15);
-                    desloc = binaryInt16(num, 0, 9); 
+                    pag = binaryInt16(num16, 10, 15);
+                    desloc = binaryInt16(num16, 0, 9); 
 
                     sum = pageSum(tlb16, tp16, pag, desloc);
                 break;
 
                 case 3:
-                    pag = binaryInt16(num, 11, 15);
-                    desloc = binaryInt16(num, 0, 10); 
+                    pag = binaryInt16(num16, 11, 15);
+                    desloc = binaryInt16(num16, 0, 10); 
 
                     sum = pageSum(tlb16, tp16, pag, desloc);
                 break;
             }
-        break;
 
-        case 2:
+            cout << num16 << endl;
+        break;
+        }
+
+        case 2:{
+            bitset<32> num32(4064679778);
+
             cout << "Qual tamanho do deslocamento? 1 - 256 B; 2 - 1 KB; 3 - 4 KB" << endl;
             cin >> op2;
+
+            switch(op2){
+                case 1:
+                    pag = binaryInt32(num32, 8, 31);
+                    desloc = binaryInt32(num32, 0, 7); 
+
+                    sum = pageSum(tlb32, tp32, pag, desloc);
+                break;
+
+                case 2:
+                    pag = binaryInt32(num32, 10, 31);
+                    desloc = binaryInt32(num32, 0, 9); 
+
+                    sum = pageSum(tlb32, tp32, pag, desloc);
+                break;
+
+                case 3:
+                    // pag = binaryInt32(num32, 11, 15);
+                    // desloc = binaryInt32(num32, 0, 10); 
+
+                    // sum = pageSum(tlb32, tp32, pag, desloc);
+                break;
+            }
+
+        cout << num32 << endl;
         break;
+        }
     }
 
     
@@ -127,7 +172,7 @@ int main() {
 
     cout << endl << endl;
 
-    cout << num << endl;
+    //cout << num << endl;
     cout << pag << endl;
     cout << desloc << endl;
     cout << "Valor final: " << valorFinal << endl;

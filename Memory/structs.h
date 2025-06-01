@@ -19,6 +19,9 @@
 
     extern TLB tlb16[16];
     extern TP tp16[32];
+    
+    extern TLB tlb32[16];
+    extern TP tp32[32];
 
 #endif
    
