@@ -1,3 +1,3 @@
-# SO-Codes
+g++ main.cpp structs.cpp -o main -lpthread -lrt
 
-Repository for codes used in Operational Systems including runtime capture, inter-process communication, threads, parallelism, and scheduling.
+./main
