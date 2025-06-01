@@ -1,3 +1,5 @@
+//Bernardo Esobar, Laís Blum e Lívia Zimermann
+
 #include <iostream>
 #include <bitset>
 #include <cstdlib>
