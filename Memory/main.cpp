@@ -4,6 +4,8 @@
 #include <bitset>
 #include <cstdlib>
 #include "structs.h"
+#include "16Bits.hpp"
+#include "32Bits.hpp"
 
 #include <fstream>
 #include <limits>
@@ -16,81 +18,6 @@ fstream& gotoLine(fstream& file, unsigned int num){
         file.ignore(numeric_limits<streamsize>::max(),'\n');
     }
     return file;
-}
-
-int binaryInt16(const bitset<16>& bits, int start, int end) {
-    int result = 0; // Armazena o valor final em inteiro
-    int bitPosition = 0; // Posição atual do bit no resultado final
-
-    for (int i = start; i <= end; ++i) {
-        if (bits[i]) { // Verifica se o bit na posição i é 1
-            result |= (1 << bitPosition); // Define o bit correspondente em result
-        }
-
-        ++bitPosition; // Avança para a próxima posição do bit no resultado
-    }
-
-    return result;
-}
-
-int binaryInt32(const bitset<32>& bits, int start, int end) {
-    int result = 0; // Armazena o valor final em inteiro
-    int bitPosition = 0; // Posição atual do bit no resultado final
-
-    for (int i = start; i <= end; ++i) {
-        if (bits[i]) { // Verifica se o bit na posição i é 1
-            result |= (1 << bitPosition); // Define o bit correspondente em result
-        }
-
-        ++bitPosition; // Avança para a próxima posição do bit no resultado
-    }
-
-    return result;
-}
-
-void viewTables16(TLB tlb16[], TP tp16[]){
-    cout << "Pg\t\t" << "Desloc\t\t" << endl;
-    for(int i=0; i<16; i++){
-        cout << tlb16[i].pg << "\t\t" << tlb16[i].value << endl;
-    }
-
-    cout << endl << endl << endl;
-
-    cout << "Pg\t\t" << "Desloc\t\t" << "Bit valido\t" << "Bit acesso" << endl;
-    for(int i=0; i<32; i++){
-        cout << tp16[i].pg << "\t\t" << tp16[i].value << "\t\t" << tp16[i].valid << "\t\t" << tp16[i].access << endl;
-    }
-}
-
-void viewTables32(TLB tlb32[], TP tp32[]){
-    cout << "Pg\t\t" << "Desloc\t\t" << endl;
-    for(int i=0; i<16; i++){
-        cout << tlb32[i].pg << "\t\t" << tlb32[i].value << endl;
-    }
-
-    cout << endl << endl << endl;
-
-    cout << "Pg\t\t" << "Desloc\t\t" << "Bit valido\t" << "Bit acesso" << endl;
-    for(int i=0; i<32; i++){
-        cout << tp32[i].pg << "\t\t" << tp32[i].value << "\t\t" << tp32[i].valid << "\t\t" << tp32[i].access << endl;
-    }
-}
-
-int pageSum16(TLB tlb16[], TP tp16[], int pag, int desloc){
-    bool b = true;
-    int sum=0;
-
-    for(int i=0; i<16; i++){
-        if(pag == tlb16[i].pg){
-            sum = tlb16[i].value + desloc;
-            b = false;
-        }
-    }
-    if(b){
-        sum = tp16[pag].value + desloc;
-    }
-
-    return sum;
 }
 
 int pageSum32(TLB tlb32[], TP tp32[], int pag, int desloc){
@@ -110,10 +37,12 @@ int pageSum32(TLB tlb32[], TP tp32[], int pag, int desloc){
     return sum;
 }
 
+
 int main() {
 
-    int pag, desloc, sum=0;
-    bool t = true;
+    int pag, desloc, frame = 0, valorMemo = 0;
+    int TLBhitCount = 0, TPhitCount = 0;
+    bool TLBhit;
 
     string valorFinal;
 
@@ -134,7 +63,28 @@ int main() {
                     pag = binaryInt16(num16, 8, 15);
                     desloc = binaryInt16(num16, 0, 7); 
 
-                    sum = pageSum16(tlb16, tp16, pag, desloc);
+                    frame = procuraTLB16(tlb16, pag, TLBhit);
+
+                    if(TLBhit){
+                        TLBhitCount++;
+
+                        valorMemo = frame * 256 + desloc;
+                    }
+                    else{
+                        frame = procuraTP16(tlb16, pag, TPhit);
+
+                        if(TPhit){
+                            TPhitCount++;
+
+                            valorMemo = frame * 256 + desloc;
+                        }
+                        else{
+                           frame = lerBackingStore(pag);
+
+                           swap(frame, tp16);
+                        }
+                    }
+
                 break;
 
                 case 2:

@@ -13,7 +13,7 @@
         int value; // valor associado
         bool valid;
         bool access;
-        // bool dirty;
+        bool dirty;
     } TP;
 
     extern TLB tlb16[16];
