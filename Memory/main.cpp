@@ -290,6 +290,7 @@ int main() {
                     }
 
                     viewTables32_2niveis(tlb32, tp_nivel1, pag1);
+
                 }            
 
                 cout << endl << endl;
@@ -325,6 +326,8 @@ int main() {
         if(eh_4KB){
             cout << "Pagina 1: " << pag1 << endl;
             cout << "Pagina 2: " << pag2 << endl;
+
+            eh_4KB = false;
         }
         else{
             cout << "Pagina: " << pag << endl;
