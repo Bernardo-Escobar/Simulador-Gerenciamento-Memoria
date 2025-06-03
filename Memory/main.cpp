@@ -335,6 +335,9 @@ int main() {
 
         cin.get();
 
+        TLBhit = false;
+        TPhit = false;
+
         cout << endl << endl;
         cout << "Deseja sair? 1 - Sim; 0 - Não" << endl; 
         cin >> sair;
