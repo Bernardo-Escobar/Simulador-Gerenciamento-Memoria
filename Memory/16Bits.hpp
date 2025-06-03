@@ -10,6 +10,9 @@
 
 using namespace std;
 
+int tempo16 = 1;
+
+//Seleciona parte do bitset (start, end) e converte de decimal para binário
 int binaryInt16(const bitset<16>& bits, int start, int end) {
     int result = 0; // Armazena o valor final em inteiro
     int bitPosition = 0; // Posição atual do bit no resultado final
@@ -25,73 +28,82 @@ int binaryInt16(const bitset<16>& bits, int start, int end) {
     return result;
 }
 
+bitset<16> converterHexBinario(string h){
+    stringstream ss; // ser  usado para converter a string h em um numero.
+    ss << hex << h;  // Insere a string h no fluxo ss, especificando que a string deve ser interpretada como um numero hexadecimal.
+    unsigned n;      // Declara uma variavel n um numero inteiro sem sinal.
+    ss >> n;         // Extrai o valor do fluxo ss e o armazena na variavel n
+    bitset<16> b(n); // Cria um objeto bitset de 32 bits chamado b e o inicializa com o valor de n. O bitset converte o numero n em sua representacao binaria.
+    return b;
+}
+
 void viewTables16(TLB tlb16[], TP tp16[]){
-    cout << "Pg\t\t" << "Desloc\t\t" << endl;
+    cout << "Pg\t\t" << "Frame number" << endl;
     for(int i=0; i<16; i++){
         cout << tlb16[i].pg << "\t\t" << tlb16[i].value << endl;
     }
 
     cout << endl << endl << endl;
 
-    cout << "Pg\t\t" << "Desloc\t\t" << "Bit valido\t" << "Bit acesso" << endl;
+    cout << "Frame\t\t" << "Bit valido\t" << "Bit acesso\t" << "Bit dirty" << endl;
     for(int i=0; i<32; i++){
-        cout << tp16[i].pg << "\t\t" << tp16[i].value << "\t\t" << tp16[i].valid << "\t\t" << tp16[i].access << endl;
+        cout << tp16[i].value << "\t\t" << tp16[i].valid << "\t\t" << tp16[i].access << "\t\t" << tp16[i].dirty << endl;
     }
 }
 
-int procuraTLB16(TLB tlb16[], int pag, bool &TLBhit){
+int LRU_tp_16(int frame, TP tp16[]){
+    for(int i = 0; i % 32 < 32; i++){ //mod para fazer um for circular, até achar access = 0
+        if(!tp16[i].access /*&& !tp16[i].dirty*/){ // 0, 0
+            tp16[i].value = frame;
+            tp16[i].valid = 1;
+            tp16[i].access = 1;
+            return i;
+        }
+        else if(tp16[i].access){
+            tp16[i].access = 0;
+        }
+    }
+    return -1;
+}
+
+void LRU_tlb_16(int pag, int frame, TLB tlb16[]){
+    // for(int i = 0; i % 16 < 16; i++){ //mod para fazer um for circular, até achar access = 0
+    //     if(tlb16[i].pg == -1 /*&& !tp16[i].dirty*/){ // 0, 0
+    //         tlb16[i].value = frame;
+    //         tlb16[i].temporizador = tlb16[i].temporizador++;
+    //         return;
+    //     }
+    // }
+    int posTempoMenor = 0; //menos utilizado
+    for (int i = 1; i < 16; i++) {
+        if (tlb16[i].temporizador < tlb16[posTempoMenor].temporizador) {
+            posTempoMenor = i;
+        }
+    }
+    tlb16[posTempoMenor].pg = pag;
+    tlb16[posTempoMenor].value = frame;
+    tlb16[posTempoMenor].temporizador = tempo16++;
+}
+
+int findTLB16(TLB tlb16[], int pag, bool &TLBhit){
     for(int i=0; i<16; i++){
         if(tlb16[i].pg == pag){
             TLBhit = true;
-            return tlb16[i].pg;
+            tlb16[i].temporizador++;
+            return tlb16[i].value;
         }
     }
     TLBhit = false;
-    return nullptr;
+    return -1;
 }
 
-int procuraTP16(TP tp16[], int pag, bool &TPhit){
+int findTP16(TP tp16[], int pag, bool &TPhit){
     if(tp16[pag].valid){
-        return tp16[pag].value;
         TPhit = true;
+        return tp16[pag].value;
     }
 
     TPhit = false;
-    return nullptr;
+    return -1;
 }
 
-int lerBackingStore(int paginaBuscada) {
-    ifstream arquivo("backing_store.txt");
-    string linha;
-
-    while (getline(arquivo, linha)) {
-        stringstream ss(linha);
-        string paginaStr, frameStr;
-
-        if (getline(ss, paginaStr, '; ') and getline(ss, frameStr)) {
-            int pag = stoi(paginaStr);
-            int frame = stoi(frameStr);
-    
-            if (pag == paginaBuscada) {
-                return frame;
-            }
-        }
-    }
-
-    return nullptr;
-}
-
-void swap(int frame, TP tp16[]){
-    for(int i = 0; i < 32; i++){
-        if(!tp16[i].access && !tp16[i].dirty){
-            tp16[i].value = frame;
-            tp16[i].valid = 1;
-            tp16[i].access = 1;
-        }
-        else if(!tp16[i].access /*&& tp16[i].dirty*/){
-            tp16[i].value = frame;
-            tp16[i].valid = 1;
-            tp16[i].access = 1;
-        }
-    }
-}
