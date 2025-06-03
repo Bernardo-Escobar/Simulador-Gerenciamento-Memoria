@@ -10,9 +10,7 @@
 
 using namespace std;
 
-int tempo16 = 1;
-
-//Seleciona parte do bitset (start, end) e converte de decimal para binário
+//Seleciona parte do bitset (start, end) e converte de binário para decimal
 int binaryInt16(const bitset<16>& bits, int start, int end) {
     int result = 0; // Armazena o valor final em inteiro
     int bitPosition = 0; // Posição atual do bit no resultado final
@@ -28,19 +26,11 @@ int binaryInt16(const bitset<16>& bits, int start, int end) {
     return result;
 }
 
-// bitset<16> converterHexBinario16(string h){
-//     stringstream ss; // ser  usado para converter a string h em um numero.
-//     ss << hex << h;  // Insere a string h no fluxo ss, especificando que a string deve ser interpretada como um numero hexadecimal.
-//     unsigned n;      // Declara uma variavel n um numero inteiro sem sinal.
-//     ss >> n;         // Extrai o valor do fluxo ss e o armazena na variavel n
-//     bitset<16> b(n); // Cria um objeto bitset de 32 bits chamado b e o inicializa com o valor de n. O bitset converte o numero n em sua representacao binaria.
-//     return b;
-// }
 
 void viewTables16(TLB tlb16[], TP tp16[]){
-    cout << "Pg\t\t" << "Frame number" << endl;
+    cout << "Pg\t\t" << "Frame number" << "\t\t" << "Temporizador" << endl;
     for(int i=0; i<16; i++){
-        cout << tlb16[i].pg << "\t\t" << tlb16[i].value << endl;
+        cout << tlb16[i].pg << "\t\t" << tlb16[i].value << "\t\t\t" << tlb16[i].temporizador << endl;
     }
 
     cout << endl << endl << endl;
@@ -67,13 +57,6 @@ int LRU_tp_16(int frame, TP tp16[]){
 }
 
 void LRU_tlb_16(int pag, int frame, TLB tlb16[]){
-    // for(int i = 0; i % 16 < 16; i++){ //mod para fazer um for circular, até achar access = 0
-    //     if(tlb16[i].pg == -1 /*&& !tp16[i].dirty*/){ // 0, 0
-    //         tlb16[i].value = frame;
-    //         tlb16[i].temporizador = tlb16[i].temporizador++;
-    //         return;
-    //     }
-    // }
     int posTempoMenor = 0; //menos utilizado
     for (int i = 1; i < 16; i++) {
         if (tlb16[i].temporizador < tlb16[posTempoMenor].temporizador) {
@@ -82,7 +65,7 @@ void LRU_tlb_16(int pag, int frame, TLB tlb16[]){
     }
     tlb16[posTempoMenor].pg = pag;
     tlb16[posTempoMenor].value = frame;
-    tlb16[posTempoMenor].temporizador = tempo16++;
+    tlb16[posTempoMenor].temporizador++;
 }
 
 int findTLB16(TLB tlb16[], int pag, bool &TLBhit){
