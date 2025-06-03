@@ -330,7 +330,8 @@ int main() {
             cout << "Pagina: " << pag << endl;
         }
         
-        cout << "Deslocamento: " << desloc << endl; //+frame
+        cout << "Deslocamento: " << desloc << endl;
+        cout << "Soma: " << sum << endl;
         cout << "Valor lido: " << valorFinal << endl;
 
         cin.get();
