@@ -10,8 +10,6 @@
 
 using namespace std;
 
-int tempo32 = 1;
-
 //Seleciona parte do bitset (start, end) e converte de decimal para binário
 int binaryInt32(const bitset<32>& bits, int start, int end) {
     int result = 0; // Armazena o valor final em inteiro
@@ -28,19 +26,10 @@ int binaryInt32(const bitset<32>& bits, int start, int end) {
     return result;
 }
 
-// bitset<32> converterHexBinario32(string h){
-//     stringstream ss; // ser  usado para converter a string h em um numero.
-//     ss << hex << h;  // Insere a string h no fluxo ss, especificando que a string deve ser interpretada como um numero hexadecimal.
-//     unsigned n;      // Declara uma variavel n um numero inteiro sem sinal.
-//     ss >> n;         // Extrai o valor do fluxo ss e o armazena na variavel n
-//     bitset<32> b(n); // Cria um objeto bitset de 32 bits chamado b e o inicializa com o valor de n. O bitset converte o numero n em sua representacao binaria.
-//     return b;
-// }
-
 void viewTables32(TLB tlb32[], TP tp32[]){
-    cout << "Pg\t\t\t" << "Desloc" << endl;
+    cout << "Pg\t\t\t" << "Frame number" << "\t\t" << "Temporizador" << endl;
     for(int i=0; i<16; i++){
-        cout << tlb32[i].pg << "\t\t\t" << tlb32[i].value << endl;
+        cout << tlb32[i].pg << "\t\t\t" << tlb32[i].value << "\t\t\t" << tlb16[i].temporizador << endl;
     }
 
     cout << endl << endl << endl;
@@ -67,13 +56,6 @@ int LRU_tp_32(int frame, TP tp32[]){
 }
 
 void LRU_tlb_32(int pag, int frame, TLB tlb32[]){
-    // for(int i = 0; i % 16 < 16; i++){ //mod para fazer um for circular, até achar access = 0
-    //     if(tlb16[i].pg == -1 /*&& !tp16[i].dirty*/){ // 0, 0
-    //         tlb16[i].value = frame;
-    //         tlb16[i].temporizador = tlb16[i].temporizador++;
-    //         return;
-    //     }
-    // }
     int posTempoMenor = 0; //menos utilizado
     for (int i = 1; i < 16; i++) {
         if (tlb32[i].temporizador < tlb32[posTempoMenor].temporizador) {
@@ -82,7 +64,7 @@ void LRU_tlb_32(int pag, int frame, TLB tlb32[]){
     }
     tlb32[posTempoMenor].pg = pag;
     tlb32[posTempoMenor].value = frame;
-    tlb32[posTempoMenor].temporizador = tempo32++;
+    tlb32[posTempoMenor].temporizador++;
 }
 
 int findTLB32(TLB tlb32[], int pag, bool &TLBhit){
