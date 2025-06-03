@@ -28,14 +28,14 @@ int binaryInt16(const bitset<16>& bits, int start, int end) {
     return result;
 }
 
-bitset<16> converterHexBinario(string h){
-    stringstream ss; // ser  usado para converter a string h em um numero.
-    ss << hex << h;  // Insere a string h no fluxo ss, especificando que a string deve ser interpretada como um numero hexadecimal.
-    unsigned n;      // Declara uma variavel n um numero inteiro sem sinal.
-    ss >> n;         // Extrai o valor do fluxo ss e o armazena na variavel n
-    bitset<16> b(n); // Cria um objeto bitset de 32 bits chamado b e o inicializa com o valor de n. O bitset converte o numero n em sua representacao binaria.
-    return b;
-}
+// bitset<16> converterHexBinario16(string h){
+//     stringstream ss; // ser  usado para converter a string h em um numero.
+//     ss << hex << h;  // Insere a string h no fluxo ss, especificando que a string deve ser interpretada como um numero hexadecimal.
+//     unsigned n;      // Declara uma variavel n um numero inteiro sem sinal.
+//     ss >> n;         // Extrai o valor do fluxo ss e o armazena na variavel n
+//     bitset<16> b(n); // Cria um objeto bitset de 32 bits chamado b e o inicializa com o valor de n. O bitset converte o numero n em sua representacao binaria.
+//     return b;
+// }
 
 void viewTables16(TLB tlb16[], TP tp16[]){
     cout << "Pg\t\t" << "Frame number" << endl;
