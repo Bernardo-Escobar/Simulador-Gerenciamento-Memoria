@@ -1,4 +1,4 @@
-# 🧠 Simulador de Gerenciamento de Memória — Trabalho M2
+# 🧠 Simulador de Gerenciamento de Memória
 
 Repositório desenvolvido como parte da Avaliação 03 da disciplina de **Sistemas Operacionais** (2025/1) do curso de **Ciência da Computação** da **Universidade do Vale do Itajaí (UNIVALI)**.  
 O projeto simula mecanismos de **memória principal** e **memória virtual**, com suporte a **TLB**, **page faults**, **bit de validade**, e mais.
