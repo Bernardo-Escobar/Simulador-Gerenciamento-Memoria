@@ -51,7 +51,7 @@ g++ main.cpp structs.cpp -o main -lpthread -lrt
 ```
 ▶️ Executar
 ```bash
-./main 19986
+./main
 ```
 
 ## 🔍 Exemplo de Saída
