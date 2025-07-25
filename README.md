@@ -96,9 +96,7 @@ Threads e sincronização (pthread)
 O relatório completo do projeto encontra-se em PDF.
 
 ## 👨‍💻 Autores
-Trabalho realizado por alunos da Universidade do Vale do Itajaí (UNIVALI)
-Disciplina: Sistemas Operacionais – Avaliação M2
-Professor: Felipe Viel
+Projeto desenvolvido por alunos da Universidade do Vale do Itajaí (UNIVALI) — Campus Itajaí Disciplina: Sistemas Operacionais
 
 ## 📜 Licença
 Uso acadêmico e educacional. Livre para consulta e aprendizado.
